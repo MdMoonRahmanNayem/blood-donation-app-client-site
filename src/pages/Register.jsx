@@ -8,6 +8,7 @@ import { app } from "../firebase/firebase.config";
 import districtsRaw from "../data/districts.json";
 import upazilasRaw from "../data/upazilas.json";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const auth = getAuth(app);
 
@@ -203,6 +204,13 @@ export default function Register() {
             {error}
           </p>
         )}
+        <p className="text-center text-sm mt-4">
+  Already have an account?{" "}
+  <Link to="/login" className="text-red-600 font-semibold">
+    Login here
+  </Link>
+</p>
+
       </div>
     </div>
   );
