@@ -14,13 +14,18 @@ export default function DashboardLayout() {
 
     if (!loading && dbUser?.status === "blocked") {
       alert("Your account is blocked");
-      logout();
-      navigate("/login");
+      logout().then(() => {
+        navigate("/login");
+      });
     }
-  }, [user, dbUser, loading]);
+  }, [user, dbUser, loading, navigate, logout]);
 
   if (loading) {
-    return <p className="text-center mt-10">Loading dashboard...</p>;
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg font-semibold">Loading dashboard...</p>
+      </div>
+    );
   }
 
   return (
@@ -30,17 +35,27 @@ export default function DashboardLayout() {
         <h2 className="text-xl font-bold mb-6">Dashboard</h2>
 
         <nav className="space-y-2">
-          <NavLink to="/dashboard" className="block hover:bg-red-700 p-2 rounded">
+          <NavLink
+            to="/dashboard"
+            className="block hover:bg-red-700 p-2 rounded"
+          >
             Dashboard Home
           </NavLink>
 
           {/* Donor Menu */}
           {dbUser?.role === "donor" && (
             <>
-              <NavLink to="/dashboard/my-donation-requests" className="block hover:bg-red-700 p-2 rounded">
+              <NavLink
+                to="/dashboard/my-donation-requests"
+                className="block hover:bg-red-700 p-2 rounded"
+              >
                 My Donation Requests
               </NavLink>
-              <NavLink to="/dashboard/create-donation-request" className="block hover:bg-red-700 p-2 rounded">
+
+              <NavLink
+                to="/dashboard/create-donation-request"
+                className="block hover:bg-red-700 p-2 rounded"
+              >
                 Create Donation Request
               </NavLink>
             </>
@@ -49,18 +64,27 @@ export default function DashboardLayout() {
           {/* Admin Menu */}
           {dbUser?.role === "admin" && (
             <>
-              <NavLink to="/dashboard/all-users" className="block hover:bg-red-700 p-2 rounded">
+              <NavLink
+                to="/dashboard/all-users"
+                className="block hover:bg-red-700 p-2 rounded"
+              >
                 All Users
               </NavLink>
-              <NavLink to="/dashboard/all-blood-donation-requests" className="block hover:bg-red-700 p-2 rounded">
+
+              <NavLink
+                to="/dashboard/all-blood-donation-requests"
+                className="block hover:bg-red-700 p-2 rounded"
+              >
                 All Blood Donation Requests
               </NavLink>
             </>
           )}
 
           <button
-            onClick={logout}
-            className="w-full bg-white text-red-600 mt-6 py-2 rounded font-semibold"
+            onClick={() => {
+              logout().then(() => navigate("/login"));
+            }}
+            className="w-full bg-white text-red-600 mt-6 py-2 rounded font-semibold hover:bg-gray-100"
           >
             Logout
           </button>
