@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Search from "../pages/Search";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 import MainLayout from "../layouts/MainLayout";
@@ -16,6 +17,7 @@ import Profile from "../dashboard/Profile";
 
 import AdminRoute from "../routes/AdminRoute";
 import VolunteerOrAdminRoute from "../routes/VolunteerOrAdminRoute";
+import DonationRequests from "../pages/DonationRequests";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,15 @@ const router = createBrowserRouter([
       { path: "/", element: <Home /> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
+      {
+  path: "/search",
+  element: <Search />,
+},
+{
+  path: "/donation-requests",
+  element: <DonationRequests/>, // public
+},
+
     ],
   },
 
@@ -73,6 +84,7 @@ const router = createBrowserRouter([
         path: "create-donation-request",
         element: <CreateDonationRequest />,
       },
+
 
       // 👤 ALL ROLES
       {
