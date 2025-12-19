@@ -4,7 +4,8 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 
 export default function MyDonationRequests() {
-  const { user } = useAuth();
+  const { dbUser } = useAuth();
+
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -15,7 +16,7 @@ export default function MyDonationRequests() {
   const loadRequests = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/donation-requests/user${user.email}`
+        `http://localhost:5000/donation-requests/user/${dbUser.email}`
       );
       setRequests(res.data);
     } catch (error) {
@@ -26,10 +27,10 @@ export default function MyDonationRequests() {
   };
 
   useEffect(() => {
-    if (user?.email) {
+    if (dbUser?.email) {
       loadRequests();
     }
-  }, [user]);
+  }, [dbUser]);
 
   // ======================
   // STATUS CHANGE
@@ -138,7 +139,6 @@ export default function MyDonationRequests() {
                   {req.donationStatus}
                 </td>
 
-                {/* ACTION */}
                 <td className="flex gap-2">
                   {req.donationStatus === "inprogress" && (
                     <>
@@ -161,7 +161,6 @@ export default function MyDonationRequests() {
                     </>
                   )}
 
-                  {/* DELETE (always allowed) */}
                   <button
                     onClick={() => handleDelete(req._id)}
                     className="px-3 py-1 bg-red-600 text-white rounded"
