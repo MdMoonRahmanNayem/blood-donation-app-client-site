@@ -14,9 +14,7 @@ export default function DashboardLayout() {
 
     if (!loading && dbUser?.status === "blocked") {
       alert("Your account is blocked");
-      logout().then(() => {
-        navigate("/login");
-      });
+      logout().then(() => navigate("/login"));
     }
   }, [user, dbUser, loading, navigate, logout]);
 
@@ -42,7 +40,7 @@ export default function DashboardLayout() {
             Dashboard Home
           </NavLink>
 
-          {/* Donor Menu */}
+          {/* DONOR MENU */}
           {dbUser?.role === "donor" && (
             <>
               <NavLink
@@ -61,23 +59,25 @@ export default function DashboardLayout() {
             </>
           )}
 
-          {/* Admin Menu */}
+          {/* ADMIN ONLY */}
           {dbUser?.role === "admin" && (
-            <>
-              <NavLink
-                to="/dashboard/all-users"
-                className="block hover:bg-red-700 p-2 rounded"
-              >
-                All Users
-              </NavLink>
+            <NavLink
+              to="/dashboard/all-users"
+              className="block hover:bg-red-700 p-2 rounded"
+            >
+              All Users
+            </NavLink>
+          )}
 
-              <NavLink
-                to="/dashboard/all-blood-donation-requests"
-                className="block hover:bg-red-700 p-2 rounded"
-              >
-                All Blood Donation Requests
-              </NavLink>
-            </>
+          {/* ADMIN + VOLUNTEER */}
+          {(dbUser?.role === "admin" ||
+            dbUser?.role === "volunteer") && (
+            <NavLink
+              to="/dashboard/all-blood-donation-requests"
+              className="block hover:bg-red-700 p-2 rounded"
+            >
+              All Blood Donation Requests
+            </NavLink>
           )}
 
           <button

@@ -1,8 +1,10 @@
 /* eslint-disable */
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function AllBloodDonationRequests() {
+  const { dbUser } = useAuth(); // 🔥 role access
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -28,7 +30,7 @@ export default function AllBloodDonationRequests() {
   }, []);
 
   // ======================
-  // STATUS UPDATE
+  // STATUS UPDATE (Admin + Volunteer)
   // ======================
   const handleStatusChange = async (id, status) => {
     try {
@@ -43,9 +45,11 @@ export default function AllBloodDonationRequests() {
   };
 
   // ======================
-  // DELETE
+  // DELETE (Admin only)
   // ======================
   const handleDelete = async (id) => {
+    if (dbUser?.role !== "admin") return;
+
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this request?"
     );
@@ -130,6 +134,7 @@ export default function AllBloodDonationRequests() {
 
                 {/* ACTION */}
                 <td className="flex gap-2 flex-wrap">
+                  {/* START */}
                   {req.donationStatus === "pending" && (
                     <button
                       onClick={() =>
@@ -141,6 +146,7 @@ export default function AllBloodDonationRequests() {
                     </button>
                   )}
 
+                  {/* DONE / CANCEL */}
                   {req.donationStatus === "inprogress" && (
                     <>
                       <button
@@ -162,12 +168,15 @@ export default function AllBloodDonationRequests() {
                     </>
                   )}
 
-                  <button
-                    onClick={() => handleDelete(req._id)}
-                    className="px-3 py-1 bg-red-600 text-white rounded"
-                  >
-                    Delete
-                  </button>
+                  {/* DELETE (ADMIN ONLY) */}
+                  {dbUser?.role === "admin" && (
+                    <button
+                      onClick={() => handleDelete(req._id)}
+                      className="px-3 py-1 bg-red-600 text-white rounded"
+                    >
+                      Delete
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

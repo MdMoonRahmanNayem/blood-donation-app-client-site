@@ -13,10 +13,13 @@ export default function DashboardHome() {
 
   useEffect(() => {
     // ======================
-    // ADMIN: load stats
+    // ADMIN + VOLUNTEER → STATS
     // ======================
-    if (dbUser?.role === "admin") {
-      axios.get("http://localhost:5000/admin-stats")
+    if (
+      (dbUser?.role === "admin" || dbUser?.role === "volunteer")
+    ) {
+      axios
+        .get("http://localhost:5000/admin-stats")
         .then((res) => {
           setStats(res.data);
           setLoading(false);
@@ -24,16 +27,19 @@ export default function DashboardHome() {
     }
 
     // ======================
-    // DONOR: load recent 3 requests
+    // DONOR → RECENT REQUESTS
     // ======================
     if (dbUser?.role === "donor" && user?.email) {
       axios
-        .get(`http://localhost:5000/donation-requests/recent/${user.email}`)
+        .get(
+          `http://localhost:5000/donation-requests/recent/${user.email}`
+        )
         .then((res) => {
           const recent = res.data
             .sort(
               (a, b) =>
-                new Date(b.createdAt) - new Date(a.createdAt)
+                new Date(b.createdAt) -
+                new Date(a.createdAt)
             )
             .slice(0, 3);
 
@@ -66,9 +72,10 @@ export default function DashboardHome() {
       </div>
 
       {/* ======================
-          ADMIN DASHBOARD
+          ADMIN + VOLUNTEER DASHBOARD
       ====================== */}
-      {dbUser?.role === "admin" && (
+      {(dbUser?.role === "admin" ||
+        dbUser?.role === "volunteer") && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white p-5 rounded-xl shadow">
             <h4 className="text-gray-500">Total Users</h4>
@@ -98,67 +105,71 @@ export default function DashboardHome() {
       {/* ======================
           DONOR DASHBOARD
       ====================== */}
-      {dbUser?.role === "donor" && recentRequests.length > 0 && (
-        <div className="bg-white p-6 rounded-xl shadow">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold">
-              Recent Donation Requests
-            </h3>
+      {dbUser?.role === "donor" &&
+        recentRequests.length > 0 && (
+          <div className="bg-white p-6 rounded-xl shadow">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-semibold">
+                Recent Donation Requests
+              </h3>
 
-            <Link
-              to="/dashboard/my-donation-requests"
-              className="text-red-600 font-medium hover:underline"
-            >
-              View My All Requests →
-            </Link>
-          </div>
+              <Link
+                to="/dashboard/my-donation-requests"
+                className="text-red-600 font-medium hover:underline"
+              >
+                View My All Requests →
+              </Link>
+            </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full border">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="border p-2">#</th>
-                  <th className="border p-2">Recipient</th>
-                  <th className="border p-2">Location</th>
-                  <th className="border p-2">Date</th>
-                  <th className="border p-2">Time</th>
-                  <th className="border p-2">Blood</th>
-                  <th className="border p-2">Status</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {recentRequests.map((req, index) => (
-                  <tr key={req._id} className="text-center">
-                    <td className="border p-2">
-                      {index + 1}
-                    </td>
-                    <td className="border p-2">
-                      {req.recipientName}
-                    </td>
-                    <td className="border p-2">
-                      {req.recipientDistrict},{" "}
-                      {req.recipientUpazila}
-                    </td>
-                    <td className="border p-2">
-                      {req.donationDate}
-                    </td>
-                    <td className="border p-2">
-                      {req.donationTime}
-                    </td>
-                    <td className="border p-2">
-                      {req.bloodGroup}
-                    </td>
-                    <td className="border p-2 capitalize">
-                      {req.donationStatus}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full border">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="border p-2">#</th>
+                    <th className="border p-2">Recipient</th>
+                    <th className="border p-2">Location</th>
+                    <th className="border p-2">Date</th>
+                    <th className="border p-2">Time</th>
+                    <th className="border p-2">Blood</th>
+                    <th className="border p-2">Status</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {recentRequests.map((req, index) => (
+                    <tr
+                      key={req._id}
+                      className="text-center"
+                    >
+                      <td className="border p-2">
+                        {index + 1}
+                      </td>
+                      <td className="border p-2">
+                        {req.recipientName}
+                      </td>
+                      <td className="border p-2">
+                        {req.recipientDistrict},{" "}
+                        {req.recipientUpazila}
+                      </td>
+                      <td className="border p-2">
+                        {req.donationDate}
+                      </td>
+                      <td className="border p-2">
+                        {req.donationTime}
+                      </td>
+                      <td className="border p-2">
+                        {req.bloodGroup}
+                      </td>
+                      <td className="border p-2 capitalize">
+                        {req.donationStatus}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 }
