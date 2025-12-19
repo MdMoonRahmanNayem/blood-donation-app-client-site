@@ -3,6 +3,8 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Search from "../pages/Search";
+import DonationDetails from "../pages/DonationDetails";
+import Funding from "../dashboard/Funding";
 
 import ProtectedRoute from "../components/ProtectedRoute";
 import MainLayout from "../layouts/MainLayout";
@@ -38,6 +40,15 @@ const router = createBrowserRouter([
 
     ],
   },
+
+  {
+  path: "/donation-requests/:id",
+  element: (
+    <ProtectedRoute>
+      <DonationDetails />
+    </ProtectedRoute>
+  ),
+},
 
   // ======================
   // DASHBOARD (Protected)
@@ -84,6 +95,11 @@ const router = createBrowserRouter([
         path: "create-donation-request",
         element: <CreateDonationRequest />,
       },
+
+      {
+  path: "funding",
+  element: <Funding />,
+},
 
 
       // 👤 ALL ROLES

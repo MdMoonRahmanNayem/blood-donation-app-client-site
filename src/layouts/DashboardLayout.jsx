@@ -69,6 +69,16 @@ export default function DashboardLayout() {
             </NavLink>
           )}
 
+          {(dbUser?.role === "admin" || dbUser?.role === "volunteer") && (
+  <NavLink
+    to="/dashboard/funding"
+    className="block hover:bg-red-700 p-2 rounded"
+  >
+    Funding
+  </NavLink>
+)}
+
+
           {/* ADMIN + VOLUNTEER */}
           {(dbUser?.role === "admin" ||
             dbUser?.role === "volunteer") && (
