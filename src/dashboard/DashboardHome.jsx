@@ -26,6 +26,28 @@ export default function DashboardHome() {
         });
     }
 
+    {/* ======================
+    VOLUNTEER QUICK ACTION
+====================== */}
+{dbUser?.role === "volunteer" && (
+  <div className="bg-white p-6 rounded-xl shadow">
+    <h3 className="text-xl font-semibold mb-2 text-red-600">
+      Volunteer Actions
+    </h3>
+    <p className="text-gray-600 mb-4">
+      You can manage all blood donation requests and update their status.
+    </p>
+
+    <Link
+      to="/dashboard/all-blood-donation-requests"
+      className="inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+    >
+      Manage Blood Donation Requests →
+    </Link>
+  </div>
+)}
+
+
     // ======================
     // DONOR → RECENT REQUESTS
     // ======================
