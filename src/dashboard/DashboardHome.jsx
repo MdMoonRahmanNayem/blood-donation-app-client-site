@@ -9,23 +9,36 @@ export default function DashboardHome() {
 
   const [stats, setStats] = useState(null);
   const [recentRequests, setRecentRequests] = useState([]);
+  const [totalFunding, setTotalFunding] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
+        // ======================
         // ADMIN + VOLUNTEER
-        if (
-          dbUser?.role === "admin" ||
-          dbUser?.role === "volunteer"
-        ) {
-          const res = await axios.get(
+        // ======================
+        if (dbUser?.role === "admin" || dbUser?.role === "volunteer") {
+          // stats
+          const statsRes = await axios.get(
             "http://localhost:5000/admin-stats"
           );
-          setStats(res.data);
+          setStats(statsRes.data);
+
+          // funding
+          const fundRes = await axios.get(
+            "http://localhost:5000/fundings"
+          );
+          const total = fundRes.data.reduce(
+            (sum, item) => sum + Number(item.amount),
+            0
+          );
+          setTotalFunding(total);
         }
 
+        // ======================
         // DONOR
+        // ======================
         if (dbUser?.role === "donor" && user?.email) {
           const res = await axios.get(
             `http://localhost:5000/donation-requests/recent/${user.email}`
@@ -35,7 +48,7 @@ export default function DashboardHome() {
       } catch (err) {
         console.error(err);
       } finally {
-        setLoading(false); // ✅ ALWAYS STOP LOADING
+        setLoading(false);
       }
     };
 
@@ -54,6 +67,7 @@ export default function DashboardHome() {
 
   return (
     <div className="space-y-6">
+      {/* WELCOME */}
       <div className="bg-white p-6 rounded-xl shadow">
         <h2 className="text-2xl font-bold text-red-600">
           Welcome, {dbUser?.name}
@@ -63,35 +77,41 @@ export default function DashboardHome() {
         </p>
       </div>
 
+      {/* ADMIN + VOLUNTEER */}
       {(dbUser?.role === "admin" ||
         dbUser?.role === "volunteer") && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="bg-white p-5 rounded-xl shadow">
-            <h4>Total Users</h4>
-            <p className="text-3xl font-bold">
+            <h4 className="text-gray-500">Total Users</h4>
+            <p className="text-3xl font-bold mt-2">
               {stats?.totalUsers || 0}
             </p>
           </div>
+
           <div className="bg-white p-5 rounded-xl shadow">
-            <h4>Total Funding</h4>
-            <p className="text-3xl font-bold">
-              {stats?.totalFunding || 0}
+            <h4 className="text-gray-500">Total Funding</h4>
+            <p className="text-3xl font-bold mt-2">
+              {totalFunding} ৳
             </p>
           </div>
+
           <div className="bg-white p-5 rounded-xl shadow">
-            <h4>Total Requests</h4>
-            <p className="text-3xl font-bold">
+            <h4 className="text-gray-500">Total Requests</h4>
+            <p className="text-3xl font-bold mt-2">
               {stats?.totalRequests || 0}
             </p>
           </div>
         </div>
       )}
 
+      {/* DONOR */}
       {dbUser?.role === "donor" &&
         recentRequests.length > 0 && (
           <div className="bg-white p-6 rounded-xl shadow">
             <div className="flex justify-between mb-4">
-              <h3>Recent Donation Requests</h3>
+              <h3 className="text-xl font-semibold">
+                Recent Donation Requests
+              </h3>
               <Link
                 to="/dashboard/my-donation-requests"
                 className="text-red-600"

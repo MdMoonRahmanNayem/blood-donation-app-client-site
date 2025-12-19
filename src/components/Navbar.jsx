@@ -21,7 +21,7 @@ export default function Navbar() {
           <Link to="/donation-requests">Donation Requests</Link>
 
           {user && (
-            <Link to="/funding">Funding</Link>
+            <Link to="/dashboard/funding">Funding</Link>
           )}
 
           {!user ? (
