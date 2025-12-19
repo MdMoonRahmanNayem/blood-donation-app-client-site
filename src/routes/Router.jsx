@@ -13,7 +13,9 @@ import AllBloodDonationRequests from "../dashboard/AllBloodDonationRequests";
 import MyDonationRequests from "../dashboard/MyDonationRequests";
 import CreateDonationRequest from "../dashboard/CreateDonationRequest";
 import Profile from "../dashboard/Profile";
+
 import AdminRoute from "../routes/AdminRoute";
+import VolunteerOrAdminRoute from "../routes/VolunteerOrAdminRoute";
 
 const router = createBrowserRouter([
   {
@@ -41,31 +43,38 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardHome />, // /dashboard
       },
-      {
-  path: "all-users",
-  element: (
-    <AdminRoute>
-      <AllUsers />
-    </AdminRoute>
-  ),
-},
-{
-  path: "all-blood-donation-requests",
-  element: (
-    <AdminRoute>
-      <AllBloodDonationRequests />
-    </AdminRoute>
-  ),
-},
 
+      // 🔒 ADMIN ONLY
+      {
+        path: "all-users",
+        element: (
+          <AdminRoute>
+            <AllUsers />
+          </AdminRoute>
+        ),
+      },
+
+      // 🔒 ADMIN + VOLUNTEER
+      {
+        path: "all-blood-donation-requests",
+        element: (
+          <VolunteerOrAdminRoute>
+            <AllBloodDonationRequests />
+          </VolunteerOrAdminRoute>
+        ),
+      },
+
+      // 👤 DONOR
       {
         path: "my-donation-requests",
-        element: <MyDonationRequests />, // donor
+        element: <MyDonationRequests />,
       },
       {
         path: "create-donation-request",
-        element: <CreateDonationRequest />, // donor
+        element: <CreateDonationRequest />,
       },
+
+      // 👤 ALL ROLES
       {
         path: "profile",
         element: <Profile />,
