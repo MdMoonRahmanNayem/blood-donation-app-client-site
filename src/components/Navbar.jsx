@@ -77,7 +77,7 @@ export default function Navbar() {
           </Link>
 
           {user && (
-            <Link to="/funding" className="block">
+            <Link to="/dashboard/funding" className="block">
               Funding
             </Link>
           )}
