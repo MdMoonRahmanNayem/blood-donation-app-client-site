@@ -28,23 +28,29 @@ export default function DashboardLayout() {
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">
-      {/* Sidebar */}
+      {/* SIDEBAR */}
       <aside className="w-full md:w-64 bg-red-600 text-white p-4">
-        <h2 className="text-xl font-bold mb-2">
-  {dbUser?.role === "admin" && "Admin Dashboard"}
-  {dbUser?.role === "donor" && "Donor Dashboard"}
-  {dbUser?.role === "volunteer" && "Volunteer Dashboard"}
-</h2>
-
-
-
+        <h2 className="text-xl font-bold mb-4">
+          {dbUser?.role === "admin" && "Admin Dashboard"}
+          {dbUser?.role === "donor" && "Donor Dashboard"}
+          {dbUser?.role === "volunteer" && "Volunteer Dashboard"}
+        </h2>
 
         <nav className="space-y-2">
+          {/* DASHBOARD HOME */}
           <NavLink
             to="/dashboard"
             className="block hover:bg-red-700 p-2 rounded"
           >
             Dashboard Home
+          </NavLink>
+
+          {/* ✅ PROFILE — ALL ROLES */}
+          <NavLink
+            to="/dashboard/profile"
+            className="block hover:bg-red-700 p-2 rounded"
+          >
+            My Profile
           </NavLink>
 
           {/* DONOR MENU */}
@@ -76,27 +82,27 @@ export default function DashboardLayout() {
             </NavLink>
           )}
 
-          {(dbUser?.role === "admin" || dbUser?.role === "volunteer") && (
-  <NavLink
-    to="/dashboard/funding"
-    className="block hover:bg-red-700 p-2 rounded"
-  >
-    Funding
-  </NavLink>
-)}
-
-
           {/* ADMIN + VOLUNTEER */}
           {(dbUser?.role === "admin" ||
             dbUser?.role === "volunteer") && (
-            <NavLink
-              to="/dashboard/all-blood-donation-requests"
-              className="block hover:bg-red-700 p-2 rounded"
-            >
-              All Blood Donation Requests
-            </NavLink>
+            <>
+              <NavLink
+                to="/dashboard/funding"
+                className="block hover:bg-red-700 p-2 rounded"
+              >
+                Funding
+              </NavLink>
+
+              <NavLink
+                to="/dashboard/all-blood-donation-requests"
+                className="block hover:bg-red-700 p-2 rounded"
+              >
+                All Blood Donation Requests
+              </NavLink>
+            </>
           )}
 
+          {/* LOGOUT */}
           <button
             onClick={() => {
               logout().then(() => navigate("/login"));
@@ -108,7 +114,7 @@ export default function DashboardLayout() {
         </nav>
       </aside>
 
-      {/* Content */}
+      {/* CONTENT */}
       <main className="flex-1 p-6 bg-gray-50">
         <Outlet />
       </main>
