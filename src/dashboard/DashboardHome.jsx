@@ -104,23 +104,80 @@ export default function DashboardHome() {
         </div>
       )}
 
-      {/* DONOR */}
-      {dbUser?.role === "donor" &&
-        recentRequests.length > 0 && (
-          <div className="bg-white p-6 rounded-xl shadow">
-            <div className="flex justify-between mb-4">
-              <h3 className="text-xl font-semibold">
-                Recent Donation Requests
-              </h3>
-              <Link
-                to="/dashboard/my-donation-requests"
-                className="text-red-600"
-              >
-                View All →
-              </Link>
-            </div>
-          </div>
-        )}
+      {dbUser?.role === "donor" && (
+  <div className="bg-white p-6 rounded-xl shadow">
+    <div className="flex justify-between items-center mb-4">
+      <h3 className="text-xl font-semibold">
+        Recent Donation Requests
+      </h3>
+
+      <Link
+        to="/dashboard/my-donation-requests"
+        className="text-red-600 text-sm hover:underline"
+      >
+        View All →
+      </Link>
+    </div>
+
+    {recentRequests.length === 0 ? (
+      <p className="text-gray-500">
+        You have not created any donation request yet.
+      </p>
+    ) : (
+      <div className="overflow-x-auto">
+        <table className="w-full border">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border p-2">#</th>
+              <th className="border p-2">Recipient</th>
+              <th className="border p-2">Location</th>
+              <th className="border p-2">Blood</th>
+              <th className="border p-2">Date</th>
+              <th className="border p-2">Time</th>
+              <th className="border p-2">Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {recentRequests.map((req, index) => (
+              <tr key={req._id} className="text-center">
+                <td className="border p-2">
+                  {index + 1}
+                </td>
+
+                <td className="border p-2">
+                  {req.recipientName}
+                </td>
+
+                <td className="border p-2">
+                  {req.recipientDistrict}, {req.recipientUpazila}
+                </td>
+
+                <td className="border p-2 font-semibold">
+                  {req.bloodGroup}
+                </td>
+
+                <td className="border p-2">
+                  {req.donationDate}
+                </td>
+
+                <td className="border p-2">
+                  {req.donationTime}
+                </td>
+
+                <td className="border p-2 capitalize">
+                  {req.donationStatus}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+  </div>
+)}
+
+
     </div>
   );
 }

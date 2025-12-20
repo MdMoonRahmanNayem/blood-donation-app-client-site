@@ -30,7 +30,14 @@ export default function DashboardLayout() {
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Sidebar */}
       <aside className="w-full md:w-64 bg-red-600 text-white p-4">
-        <h2 className="text-xl font-bold mb-6">Dashboard</h2>
+        <h2 className="text-xl font-bold mb-2">
+  {dbUser?.role === "admin" && "Admin Dashboard"}
+  {dbUser?.role === "donor" && "Donor Dashboard"}
+  {dbUser?.role === "volunteer" && "Volunteer Dashboard"}
+</h2>
+
+
+
 
         <nav className="space-y-2">
           <NavLink

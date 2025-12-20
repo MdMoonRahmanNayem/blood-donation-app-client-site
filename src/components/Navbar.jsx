@@ -2,6 +2,8 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
+import logo from "../assets/blood.jpg";
+
 
 export default function Navbar() {
   const { user, dbUser, logout } = useAuth();
@@ -9,12 +11,20 @@ export default function Navbar() {
   const [dropOpen, setDropOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow sticky top-0 z-50">
+    <nav className="bg-red-600 text-gray-300 ">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold text-red-600">
-          BloodCare
-        </Link>
+        <Link to="/" className="flex items-center gap-2">
+  <img
+    src={logo}
+    alt="BloodCare Logo"
+    className="h-10 w-auto object-contain"
+  />
+  <span className="text-xl font-bold text-white-600 hidden sm:block">
+    BloodCare
+  </span>
+</Link>
+
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-6">

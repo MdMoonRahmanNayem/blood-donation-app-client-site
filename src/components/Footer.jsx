@@ -41,7 +41,7 @@ export default function Footer() {
           <h4 className="font-semibold text-white mb-3">
             Contact
           </h4>
-          <p>📞 +880 1999993182</p>
+          <p>📞 +880 1999991182</p>
           <p>📧 support@bloodcare.com</p>
         </div>
       </div>
